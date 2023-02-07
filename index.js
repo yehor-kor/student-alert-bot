@@ -74,8 +74,8 @@ const start = () => {
     }
     
     else if (
-      text === "/start" ||
-      (text === "/start@student_alert_bot" && isFirstTime)
+      (text === "/start" || text === "/start@student_alert_bot") &&
+      isFirstTime
     ) {
       isFirstTime = false;
       await bot.sendMessage(
@@ -85,8 +85,8 @@ const start = () => {
     }
     
     else if (
-      text === "/start" ||
-      (text === "/start@student_alert_bot" && !isFirstTime)
+      (text === "/start" || text === "/start@student_alert_bot") &&
+      !isFirstTime
     ) {
       await bot.sendMessage(chatID, "Hi! I am still here.");
     }
