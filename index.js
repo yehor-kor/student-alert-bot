@@ -84,7 +84,7 @@ const start = () => {
     }
     
     else if (text === "/grade" || text === "/grade@student_alert_bot") {
-      let randomGrade = Math.floor(Math.random() * 100 + 60);
+      let randomGrade = Math.floor(Math.random() * 40 + 60); // range [60; 100]
       await bot.sendMessage(
         chatID,
         `${msg.from.first_name} aka @${msg.from.username} has a ${randomGrade} grade!`
