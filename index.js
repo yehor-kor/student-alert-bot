@@ -33,8 +33,8 @@ const start = () => {
       text === "/alert" ||
       text === "/alert@student_alert_bot"
     ) {
-      await bot.sendMessage(chatID, "🔴 ALERT, suka blyat");
       await bot.sendVoice(chatID, "./sounds/alert.ogg");
+      await bot.sendMessage(chatID, "🔴 ALERT, suka blyat");
     }
     
     else if (
