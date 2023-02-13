@@ -1,10 +1,11 @@
 const telegramAPI = require("node-telegram-bot-api");
 const fs = require("fs"); 
-const config = require("./config.json");
 
-const tag = config.tag; // my tg bot`s username tag
-const token = config.token; // my tg bot`s API token 
-const ownerNumber = config.ownerNumber; // my tg chat`s code number
+require("dotenv").config();
+
+const tag = process.env.TAG; // my tg bot`s username tag
+const token = process.env.TOKEN; // my tg bot`s API token 
+const ownerNumber = process.env.OWNER_NUMBER; // my tg chat`s code number
 const bot = new telegramAPI(token, { polling: true }); // my tg bot
 
 const start = () => {
@@ -47,6 +48,8 @@ const start = () => {
 
     const isKeyword = (word) => {
       keywords = require("./keywords.json");
+
+      if (word === undefined) return false;
 
       for (let i = 0; i < keywords.length; i++) {
         if (keywords[i] === word.toLowerCase()) {
