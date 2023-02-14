@@ -19,6 +19,7 @@ const start = () => {
   bot.setMyCommands([
     { command: "/start", description: "Start bot" },
     { command: "/alert", description: "Play an alert sound" },
+    { command: "/cum", description: "Play a funny gif" },
     { command: "/completed", description: "Play a funny sound 1" },
     { command: "/lightoff", description: "Play a funny sound 2" },
     { command: "/shiza", description: "Play a funny sound 3" },
@@ -63,6 +64,10 @@ const start = () => {
     if (isCommand("/alert") || isKeyword(text)) {
       await bot.sendVoice(chatID, "./sounds/alert.ogg");
       await bot.sendMessage(chatID, alertMessage);
+    }
+    
+    if (isCommand("/cum")) {
+      await bot.sendAnimation(chatID, "./gifs/cum.mp4")
     }
     
     else if (isCommand("/completed")) {
