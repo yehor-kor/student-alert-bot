@@ -10,25 +10,26 @@ const bot = new telegramAPI(token, { polling: true }); // my tg bot
 
 const start = () => {
   let keywords = require("./keywords.json");
-  let alertMessage = "🔴 ALERT, suka blyat";
+  let alertMessage = "🔴 Увага! Перекличка, пройдіть на заняття!\n";
+  let clearMessage = "🟢 Увага! Перекличка закінчилася, лягайте спати.\n";
   let isFirstTime = true;
   let isSettingKeyword = false;
   let isSettingAlert = false;
   let isSecretMessage = false;
 
   bot.setMyCommands([
-    { command: "/start", description: "Start bot" },
     { command: "/alert", description: "Play an alert sound" },
+    { command: "/clear", description: "Play an all-clear sound" },
+    { command: "/start", description: "Start bot" },
     { command: "/cum", description: "Play a funny gif" },
     { command: "/completed", description: "Play a funny sound 1" },
     { command: "/lightoff", description: "Play a funny sound 2" },
     { command: "/shiza", description: "Play a funny sound 3" },
     { command: "/victory", description: "Play a funny sound 4" },
     { command: "/donbass", description: "Play a funny sound 5" },
-    { command: "/8let", description: "Play a funny sound 6" },
-    { command: "/hellobiden", description: "Play a funny sound 7" },
-    { command: "/probitie", description: "Play a funny sound 8" },
-    { command: "/chocolate", description: "Play a funny sound 9" },
+    { command: "/hellobiden", description: "Play a funny sound 6" },
+    { command: "/probitie", description: "Play a funny sound 7" },
+    { command: "/chocolate", description: "Play a funny sound 8" },
     { command: "/random", description: "Generate a random number from 1 to 6" },
     { command: "/grade", description: "Get a random grade" },
     { command: "/showkeywords", description: "Show a list of all selected keywords" },
@@ -60,14 +61,37 @@ const start = () => {
 
       return false;
     }
-    
-    if (isCommand("/alert") || isKeyword(text)) {
-      await bot.sendVoice(chatID, "./sounds/alert.ogg");
-      await bot.sendMessage(chatID, alertMessage);
+
+    const getCurrentTime = () => {
+      const d = new Date();
+
+      let h = d.getHours();
+      let m = d.getMinutes();
+      let s = d.getSeconds();
+
+      let hours = h < 10 ? "0" + h : h;
+      let minutes = m < 10 ? "0" + m : m;
+      let seconds = s < 10 ? "0" + s : s;
+
+      return `${hours}:${minutes}:${seconds}`;
     }
     
-    if (isCommand("/cum")) {
-      await bot.sendAnimation(chatID, "./gifs/cum.mp4")
+    if (isCommand("/alert") || isKeyword(text)) {
+      let timeMessage = `Стартувала о ${getCurrentTime()}`;
+
+      await bot.sendVoice(chatID, "./sounds/alert.ogg");
+      await bot.sendMessage(chatID, alertMessage + timeMessage);
+    }
+
+    else if (isCommand("/clear")) {
+      let timeMessage = `Закінчилася о ${getCurrentTime()}`;
+
+      await bot.sendAudio(chatID, "./sounds/probitie.mp3");
+      await bot.sendMessage(chatID, clearMessage + timeMessage);
+    }
+    
+    else if (isCommand("/cum")) {
+      await bot.sendAnimation(chatID, "./videos/cum.mp4");
     }
     
     else if (isCommand("/completed")) {
