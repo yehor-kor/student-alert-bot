@@ -6,6 +6,7 @@ require('dotenv').config();
 const tag = process.env.TAG; // my tg bot`s username tag
 const token = process.env.TOKEN; // my tg bot`s API token 
 const ownerNumber = process.env.OWNER_NUMBER; // my tg chat`s code number
+const channelNumber = process.env.CHANNEL_NUMBER; // my tg channel`s code number
 const bot = new telegramAPI(token, { polling: true }); // my tg bot
 
 const start = () => {
@@ -18,9 +19,9 @@ const start = () => {
   let isSecretMessage = false;
 
   bot.setMyCommands([
+    { command: '/start', description: 'Start bot or do secret' },
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
-    { command: '/start', description: 'Start bot' },
     { command: '/cum', description: 'Play a funny gif' },
     { command: '/completed', description: 'Play a funny sound 1' },
     { command: '/lightoff', description: 'Play a funny sound 2' },
@@ -194,6 +195,20 @@ const start = () => {
     
     else if (isCommand('/start') && !isFirstTime) {
       await bot.sendMessage(chatID, 'Hi! I am still here.');
+    }
+    
+    else if (isCommand('/start /alert') && !isFirstTime) {
+      let timeMessage = `Стартувала о ${getCurrentTime()}`;
+
+      await bot.sendVoice(channelNumber, "./sounds/alert.ogg");
+      await bot.sendMessage(channelNumber, alertMessage + timeMessage);
+    }
+    
+    else if (isCommand('/start /clear') && !isFirstTime) {
+      let timeMessage = `Закінчилася о ${getCurrentTime()}`;
+
+      await bot.sendAudio(channelNumber, "./sounds/probitie.mp3");
+      await bot.sendMessage(channelNumber, clearMessage + timeMessage);
     }
     
     else if (isCommand('/random')) {
