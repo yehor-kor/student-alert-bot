@@ -197,14 +197,14 @@ const start = () => {
       await bot.sendMessage(chatID, 'Hi! I am still here.');
     }
     
-    else if (isCommand('/start /alert') && !isFirstTime) {
+    else if (isCommand('/start -alert')) {
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
 
       await bot.sendVoice(channelNumber, "./sounds/alert.ogg");
       await bot.sendMessage(channelNumber, alertMessage + timeMessage);
     }
     
-    else if (isCommand('/start /clear') && !isFirstTime) {
+    else if (isCommand('/start -clear')) {
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
 
       await bot.sendAudio(channelNumber, "./sounds/probitie.mp3");
