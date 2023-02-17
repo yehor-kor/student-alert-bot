@@ -3,11 +3,35 @@ const fs = require('fs');
 
 require('dotenv').config();
 
-const tag = process.env.TAG; // my tg bot`s username tag
 const token = process.env.TOKEN; // my tg bot`s API token 
-const ownerNumber = process.env.OWNER_NUMBER; // my tg chat`s code number
-const channelNumber = process.env.CHANNEL_NUMBER; // my tg channel`s code number
+const botUsername = process.env.BOT_USERNAME; // my tg bot`s username
+const ownerUsername = process.env.OWNER_USERNAME; // my own username
+const ownerID = process.env.OWNER_ID; // my tg chat`s code number
+const channelID = process.env.CHANNEL_ID; // my tg channel`s code number
 const bot = new telegramAPI(token, { polling: true }); // my tg bot
+
+const musicOptions = {
+  reply_markup: JSON.stringify({
+    inline_keyboard: [
+      [
+        { text: 'completed.ogg', callback_data: '/completed' },
+        { text: 'hellobiden.ogg', callback_data: '/hellobiden' }
+      ],
+      [
+        { text: 'lightoff.ogg', callback_data: '/lightoff' },
+        { text: 'shiza.ogg', callback_data: '/shiza' }
+      ],
+      [
+        { text: 'victory.ogg', callback_data: '/victory' },
+        { text: 'chocolate.mp3', callback_data: '/chocolate' }
+      ],
+      [
+        { text: 'donbass.mp3', callback_data: '/donbass' },
+        { text: 'probitie.mp3', callback_data: '/probitie' }
+      ]
+    ]
+  })
+};
 
 const start = () => {
   let keywords = require('./keywords.json');
@@ -23,14 +47,7 @@ const start = () => {
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
     { command: '/cum', description: 'Play a funny gif' },
-    { command: '/completed', description: 'Play a funny sound 1' },
-    { command: '/lightoff', description: 'Play a funny sound 2' },
-    { command: '/shiza', description: 'Play a funny sound 3' },
-    { command: '/hellobiden', description: 'Play a funny sound 4' },
-    { command: '/victory', description: 'Play a funny sound 5' },
-    { command: '/donbass', description: 'Play a funny sound 6' },
-    { command: '/probitie', description: 'Play a funny sound 7' },
-    { command: '/chocolate', description: 'Play a funny sound 8' },
+    { command: '/music', description: 'Show a music menu' },
     { command: '/random', description: 'Generate a random number from 1 to 6' },
     { command: '/grade', description: 'Get a random grade' },
     { command: '/setalert', description: 'Set any alert message whatever you want' },
@@ -46,7 +63,7 @@ const start = () => {
     const chatID = msg.chat.id;
 
     const isCommand = (command) => {
-      return text === command || text === command + tag;
+      return text === command || text === command + botUsername;
     }
 
     const isKeyword = (word) => {
@@ -79,14 +96,12 @@ const start = () => {
     
     if (isCommand('/alert') || isKeyword(text)) {
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
-
       await bot.sendVoice(chatID, './sounds/alert.ogg');
       await bot.sendMessage(chatID, alertMessage + timeMessage);
     }
 
     else if (isCommand('/clear')) {
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
-
       await bot.sendAudio(chatID, './sounds/probitie.mp3');
       await bot.sendMessage(chatID, clearMessage + timeMessage);
     }
@@ -95,36 +110,30 @@ const start = () => {
       await bot.sendAnimation(chatID, './videos/cum.mp4');
     }
     
-    else if (isCommand('/completed')) {
-      await bot.sendVoice(chatID, './sounds/completed.ogg');
+    else if (
+      isCommand('/completed') ||
+      isCommand('/hellobiden') ||
+      isCommand('/lightoff') ||
+      isCommand('/shiza') ||
+      isCommand('/victory')
+    ) {
+      await bot.sendVoice(chatID, `./sounds${text}.ogg`);
     }
     
-    else if (isCommand('/lightoff')) {
-      await bot.sendVoice(chatID, './sounds/light_off.ogg');
+    else if (
+      isCommand('/chocolate') ||
+      isCommand('/donbass') ||
+      isCommand('/probitie')
+    ) {
+      await bot.sendAudio(chatID, `./sounds${text}.mp3`);
     }
-    
-    else if (isCommand('/shiza')) {
-      await bot.sendVoice(chatID, './sounds/shiza.ogg');
-    }
-    
-    else if (isCommand('/hellobiden')) {
-      await bot.sendVoice(chatID, './sounds/hello_biden.ogg');
-    }
-    
-    else if (isCommand('/victory')) {
-      await bot.sendVoice(chatID, './sounds/victory.ogg');
-    }
-    
-    else if (isCommand('/donbass')) {
-      await bot.sendAudio(chatID, './sounds/donbass.mp3');
-    }
-    
-    else if (isCommand('/probitie')) {
-      await bot.sendAudio(chatID, './sounds/probitie.mp3');
-    }
-    
-    else if (isCommand('/chocolate')) {
-      await bot.sendAudio(chatID, './sounds/chocolate.mp3');
+      
+    else if (isCommand('/music')) {
+      await bot.sendMessage(
+        chatID,
+        '-----------------------Music Menu---------------',
+        musicOptions
+      );
     }
     
     else if (isSettingKeyword) {
@@ -189,26 +198,22 @@ const start = () => {
       isFirstTime = false;
       await bot.sendMessage(
         chatID,
-        'Hello and welcome to Pereklichka bot!\nDeveloped by @yehor_kor'
+        `Hello and welcome to Pereklichka bot!\nDeveloped by ${ownerUsername}`
       );
     }
     
     else if (isCommand('/start') && !isFirstTime) {
-      await bot.sendMessage(chatID, 'Hi! I am still here.');
+      await bot.sendMessage(chatID, `Hi! I am still here.`);
     }
     
-    else if (isCommand('/start -alert')) {
+    else if (isCommand('/start alert')) {
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
-
-      await bot.sendVoice(channelNumber, "./sounds/alert.ogg");
-      await bot.sendMessage(channelNumber, alertMessage + timeMessage);
+      await bot.sendMessage(channelID, alertMessage + timeMessage);
     }
     
-    else if (isCommand('/start -clear')) {
+    else if (isCommand('/start clear')) {
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
-
-      await bot.sendAudio(channelNumber, "./sounds/probitie.mp3");
-      await bot.sendMessage(channelNumber, clearMessage + timeMessage);
+      await bot.sendMessage(channelID, clearMessage + timeMessage);
     }
     
     else if (isCommand('/random')) {
@@ -261,11 +266,39 @@ const start = () => {
       isSecretMessage = false;
       await bot.sendMessage(chatID, 'The text message has been sent.');
       await bot.sendMessage(
-        ownerNumber,
+        ownerID,
         `Secret message from ${msg.from.first_name} ${msg.from.last_name} aka @${msg.from.username}\n${text}`
       );
     }
   });
+
+  bot.on('callback_query', async (msg) => {
+    const data = msg.data;
+    const chatID = msg.message.chat.id; ////
+
+    const isCommand = (command) => {
+      return data === command;
+    }
+
+    if (
+      isCommand('/completed') ||
+      isCommand('/hellobiden') ||
+      isCommand('/lightoff') ||
+      isCommand('/shiza') ||
+      isCommand('/victory')
+    ) {
+      await bot.sendVoice(chatID, `./sounds${data}.ogg`);
+    }
+  
+    else if (
+      isCommand('/chocolate') ||
+      isCommand('/donbass') ||
+      isCommand('/probitie')
+    ) {
+      await bot.sendAudio(chatID, `./sounds${data}.mp3`);
+    }
+  });
+
 };
 
 start();
