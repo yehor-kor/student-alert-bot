@@ -36,7 +36,8 @@ const musicOptions = {
 const start = () => {
   let keywords = require('./keywords.json');
   let alertMessage = '🔴 Увага! Перекличка, пройдіть на заняття!\n';
-  let clearMessage = '🟢 Увага! Перекличка закінчилася, лягайте спати.\n';
+  let clearMessage = '🟢 Перекличка закінчилася, лягайте спати.\n';
+  let selfMessage = '⚡️ Увага! Самовідмітка на занятті доступна протягом 15 хвилин.\n';
   let isFirstTime = true;
   let isSettingKeyword = false;
   let isSettingAlert = false;
@@ -46,6 +47,7 @@ const start = () => {
     { command: '/start', description: 'Start bot or do secret' },
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
+    { command: '/self', description: 'Play an self-marking sound' },
     { command: '/cum', description: 'Play a funny gif' },
     { command: '/music', description: 'Show a music menu' },
     { command: '/random', description: 'Generate a random number from 1 to 6' },
@@ -57,10 +59,12 @@ const start = () => {
   ]);
 
   bot.on('message', async (msg) => {
-    console.log(msg); // view info about messages
-
     const text = msg.text;
     const chatID = msg.chat.id;
+
+    console.log('------------------------------');
+    console.log(msg.chat.title); // view info about chat
+    console.log(`text: ${text}`); // view text in messages
 
     const isCommand = (command) => {
       return text === command || text === command + botUsername;
@@ -99,11 +103,16 @@ const start = () => {
       await bot.sendVoice(chatID, './sounds/alert.ogg');
       await bot.sendMessage(chatID, alertMessage + timeMessage);
     }
-
+    
     else if (isCommand('/clear')) {
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
       await bot.sendAudio(chatID, './sounds/probitie.mp3');
       await bot.sendMessage(chatID, clearMessage + timeMessage);
+    }
+    
+    else if (isCommand('/self')) {
+      await bot.sendVoice(chatID, './sounds/victory.ogg');
+      await bot.sendMessage(chatID, selfMessage);
     }
     
     else if (isCommand('/cum')) {
@@ -214,6 +223,10 @@ const start = () => {
     else if (isCommand('/start clear')) {
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
       await bot.sendMessage(channelID, clearMessage + timeMessage);
+    }
+    
+    else if (isCommand('/start self')) {
+      await bot.sendMessage(channelID, selfMessage);
     }
     
     else if (isCommand('/random')) {
