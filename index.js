@@ -144,7 +144,7 @@ const start = () => {
       return `${hours}:${minutes}:${seconds}`;
     }
 
-    viewInfo();
+    // viewInfo();
     
     if (isCommand('/alert') || isKeyword(text)) {
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
