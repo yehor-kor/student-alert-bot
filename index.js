@@ -103,7 +103,7 @@ const start = () => {
       // view info about chat
       console.log(chatTitle !== undefined ? chatTitle : chatID);
       // view info about user
-      console.log(`${firstName} ${lastName} ( @${username} )`);
+      console.log(`${firstName}${lastName !== undefined ? ' ' + lastName : ''}${username !== undefined ? ' ( @' + username + ' )' : ''}`);
       // show time
       console.log(`${time.toGMTString()}\n${time.toLocaleString()}`);
       // show message type
@@ -287,7 +287,7 @@ const start = () => {
       let randomGrade = Math.round(Math.random() * 100); // range [0; 100]
       await bot.sendMessage(
         chatID,
-        `${firstName} aka @${username} has a ${randomGrade} grade!`
+        `${firstName}${username !== undefined ? ' aka @' + username : ''} has a ${randomGrade} grade!`
       );
     }
       
@@ -295,7 +295,7 @@ const start = () => {
       let randomLength = Math.round(Math.random() * 30); // range [0; 30]
       await bot.sendMessage(
         chatID,
-        `${firstName} aka @${username} has a ${randomLength}cm banana!`
+        `${firstName}${username !== undefined ? ' aka @' + username : ''} has a ${randomLength}cm banana!`
       );
     }
     
@@ -336,7 +336,7 @@ const start = () => {
       await bot.sendMessage(chatID, 'The text message has been sent.');
       await bot.sendMessage(
         ownerID,
-        `Secret message from ${firstName} ${lastName} aka @${username}\n${text}`
+        `Secret message from ${firstName}${lastName !== undefined ? ' ' + lastName : ''}${username !== undefined ? ' aka @' + username : ''}\n${text}`
       );
     }
   });
