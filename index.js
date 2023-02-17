@@ -10,29 +10,6 @@ const ownerID = process.env.OWNER_ID; // my tg chat`s code number
 const channelID = process.env.CHANNEL_ID; // my tg channel`s code number
 const bot = new telegramAPI(token, { polling: true }); // my tg bot
 
-const musicOptions = {
-  reply_markup: JSON.stringify({
-    inline_keyboard: [
-      [
-        { text: 'completed.ogg', callback_data: '/completed' },
-        { text: 'hellobiden.ogg', callback_data: '/hellobiden' }
-      ],
-      [
-        { text: 'lightoff.ogg', callback_data: '/lightoff' },
-        { text: 'shiza.ogg', callback_data: '/shiza' }
-      ],
-      [
-        { text: 'victory.ogg', callback_data: '/victory' },
-        { text: 'chocolate.mp3', callback_data: '/chocolate' }
-      ],
-      [
-        { text: 'donbass.mp3', callback_data: '/donbass' },
-        { text: 'probitie.mp3', callback_data: '/probitie' }
-      ]
-    ]
-  })
-};
-
 const start = () => {
   let keywords = require('./keywords.json');
   let alertMessage = '🔴 Увага! Перекличка, пройдіть на заняття!\n';
@@ -48,8 +25,8 @@ const start = () => {
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
     { command: '/self', description: 'Play an self-marking sound' },
-    { command: '/cum', description: 'Play a funny gif' },
     { command: '/music', description: 'Show a music menu' },
+    { command: '/cum', description: 'Play a funny gif' },
     { command: '/random', description: 'Generate a random number from 1 to 6' },
     { command: '/grade', description: 'Get a random grade' },
     { command: '/setalert', description: 'Set any alert message whatever you want' },
@@ -57,6 +34,58 @@ const start = () => {
     { command: '/showkeywords', description: 'Show a list of all selected keywords' },
     { command: '/sendsecret', description: 'Send a message to developer' }
   ]);
+
+  const musicOptions = {
+    reply_markup: JSON.stringify({
+      inline_keyboard: [
+        [
+          { text: "completed.ogg", callback_data: "/completed" },
+          { text: "hellobiden.ogg", callback_data: "/hellobiden" },
+        ],
+        [
+          { text: "lightoff.ogg", callback_data: "/lightoff" },
+          { text: "shiza.ogg", callback_data: "/shiza" },
+        ],
+        [
+          { text: "victory.ogg", callback_data: "/victory" },
+          { text: "chocolate.mp3", callback_data: "/chocolate" },
+        ],
+        [
+          { text: "donbass.mp3", callback_data: "/donbass" },
+          { text: "probitie.mp3", callback_data: "/probitie" },
+        ],
+      ],
+    }),
+  };
+
+  bot.on("callback_query", async (msg) => {
+    const data = msg.data;
+    const chatID = msg.message.chat.id;
+
+    const isCommand = (command) => {
+      return data === command;
+    };
+
+    if (
+      isCommand("/completed") ||
+      isCommand("/hellobiden") ||
+      isCommand("/lightoff") ||
+      isCommand("/shiza") ||
+      isCommand("/victory")
+    ) {
+      await bot.sendVoice(chatID, `./sounds${data}.ogg`);
+    }
+    
+    else if (
+      isCommand("/chocolate") ||
+      isCommand("/donbass") ||
+      isCommand("/probitie")
+    ) {
+      await bot.sendAudio(chatID, `./sounds${data}.mp3`);
+    }
+
+    await bot.answerCallbackQuery(msg.id, `${data}`);
+  });
 
   bot.on('message', async (msg) => {
     const text = msg.text;
@@ -71,13 +100,13 @@ const start = () => {
     const viewInfo = () => {
       console.log("------------------------------");
       // view info about chat
-      console.log(chatTitle);
+      console.log(`${chatTitle !== undefined ? chatTitle : chatID}`);
       // view info about user
       console.log(`${firstName} ${lastName} ( @${username} )`);
       // show time
       console.log(`${time.toGMTString()}\n${time.toLocaleString()}`);
       // show message type
-      console.log(`type: ${msg.entities !== undefined ? msg.entities[0].type : `default_message`}`);
+      console.log(`type: ${msg.entities !== undefined ? msg.entities[0].type : 'default_message'}`);
       // view text in messages
       console.log(`text: ${text}`);
     }
@@ -158,7 +187,7 @@ const start = () => {
     else if (isCommand('/music')) {
       await bot.sendMessage(
         chatID,
-        '-----------------------Music Menu---------------',
+        '-------------------Music Menu---------------',
         musicOptions
       );
     }
@@ -302,34 +331,6 @@ const start = () => {
       );
     }
   });
-
-  bot.on('callback_query', async (msg) => {
-    const data = msg.data;
-    const chatID = msg.message.chat.id;
-
-    const isCommand = (command) => {
-      return data === command;
-    }
-
-    if (
-      isCommand('/completed') ||
-      isCommand('/hellobiden') ||
-      isCommand('/lightoff') ||
-      isCommand('/shiza') ||
-      isCommand('/victory')
-    ) {
-      await bot.sendVoice(chatID, `./sounds${data}.ogg`);
-    }
-  
-    else if (
-      isCommand('/chocolate') ||
-      isCommand('/donbass') ||
-      isCommand('/probitie')
-    ) {
-      await bot.sendAudio(chatID, `./sounds${data}.mp3`);
-    }
-  });
-
 };
 
 start();
