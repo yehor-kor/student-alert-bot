@@ -29,6 +29,7 @@ const start = () => {
     { command: '/cum', description: 'Play a funny gif' },
     { command: '/random', description: 'Generate a random number from 1 to 6' },
     { command: '/grade', description: 'Get a random grade' },
+    { command: '/banana', description: 'Get a random length of banana' },
     { command: '/setalert', description: 'Set any alert message whatever you want' },
     { command: '/addkeyword', description: 'Add any keyword whatever you want' },
     { command: '/showkeywords', description: 'Show a list of all selected keywords' },
@@ -100,7 +101,7 @@ const start = () => {
     const viewInfo = () => {
       console.log("------------------------------");
       // view info about chat
-      console.log(`${chatTitle !== undefined ? chatTitle : chatID}`);
+      console.log(chatTitle !== undefined ? chatTitle : chatID);
       // view info about user
       console.log(`${firstName} ${lastName} ( @${username} )`);
       // show time
@@ -287,6 +288,14 @@ const start = () => {
       await bot.sendMessage(
         chatID,
         `${firstName} aka @${username} has a ${randomGrade} grade!`
+      );
+    }
+      
+    else if (isCommand('/banana')) {
+      let randomLength = Math.round(Math.random() * 30); // range [0; 30]
+      await bot.sendMessage(
+        chatID,
+        `${firstName} aka @${username} has a ${randomLength}cm banana!`
       );
     }
     
