@@ -61,10 +61,26 @@ const start = () => {
   bot.on('message', async (msg) => {
     const text = msg.text;
     const chatID = msg.chat.id;
+    const chatTitle = msg.chat.title;
+    const firstName = msg.from.first_name;
+    const lastName = msg.from.last_name;
+    const username = msg.from.username;
+    const date = msg.date;
+    const time = new Date(date * 1000);
 
-    console.log('------------------------------');
-    console.log(msg.chat.title); // view info about chat
-    console.log(`text: ${text}`); // view text in messages
+    const viewInfo = () => {
+      console.log("------------------------------");
+      // view info about chat
+      console.log(chatTitle);
+      // view info about user
+      console.log(`${firstName} ${lastName} ( @${username} )`);
+      // show time
+      console.log(`${time.toGMTString()}\n${time.toLocaleString()}`);
+      // show message type
+      console.log(`type: ${msg.entities !== undefined ? msg.entities[0].type : `default_message`}`);
+      // view text in messages
+      console.log(`text: ${text}`);
+    }
 
     const isCommand = (command) => {
       return text === command || text === command + botUsername;
@@ -97,6 +113,8 @@ const start = () => {
 
       return `${hours}:${minutes}:${seconds}`;
     }
+
+    viewInfo();
     
     if (isCommand('/alert') || isKeyword(text)) {
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
@@ -207,7 +225,7 @@ const start = () => {
       isFirstTime = false;
       await bot.sendMessage(
         chatID,
-        `Hello and welcome to Pereklichka bot!\nDeveloped by ${ownerUsername}`
+        `Hello and welcome to StudentAlert bot!\nDeveloped by ${ownerUsername}`
       );
     }
     
@@ -239,7 +257,7 @@ const start = () => {
       let randomGrade = Math.round(Math.random() * 100); // range [0; 100]
       await bot.sendMessage(
         chatID,
-        `${msg.from.first_name} aka @${msg.from.username} has a ${randomGrade} grade!`
+        `${firstName} aka @${username} has a ${randomGrade} grade!`
       );
     }
     
@@ -280,14 +298,14 @@ const start = () => {
       await bot.sendMessage(chatID, 'The text message has been sent.');
       await bot.sendMessage(
         ownerID,
-        `Secret message from ${msg.from.first_name} ${msg.from.last_name} aka @${msg.from.username}\n${text}`
+        `Secret message from ${firstName} ${lastName} aka @${username}\n${text}`
       );
     }
   });
 
   bot.on('callback_query', async (msg) => {
     const data = msg.data;
-    const chatID = msg.message.chat.id; ////
+    const chatID = msg.message.chat.id;
 
     const isCommand = (command) => {
       return data === command;
