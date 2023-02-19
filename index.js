@@ -359,20 +359,19 @@ const start = () => {
       isAsked = false;
       const request = text;
 
-      const response = await openai.createCompletion({
-        engine: 'text-davinci-003',
+      const response = openai.createCompletion({
+        model: 'text-davinci-003',
         prompt: request, // prompt: asked message
         temperature: 0,
-        max_tokens: 7,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        max_tokens: 1024
       });
 
-      const answer = (response?.data?.choices?.[0]?.text ?? "").trim();
-
-      if (answer !== "") {
-        await bot.sendMessage(chatID, answer);
-      } else {
-        console.error("Invalid response from OpenAI API");
-      }
+      response.then((data) => {
+        bot.sendMessage(chatID, data.data.choices[0].text);
+      });
     }
     
     else if (isSecretMessage) {
