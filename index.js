@@ -1,11 +1,13 @@
 const telegramAPI = require('node-telegram-bot-api');
-const openai = require("openai").default;
+const { Configuration, OpenAIApi } = require('openai');
 const fs = require('fs');
 
 require('dotenv').config();
 
 const tgBotToken = process.env.TG_BOT_TOKEN; // my tg bot API token 
-const openaiAPIToken = process.env.OPENAI_API_TOKEN; // my openAI API token
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_TOKEN, // my openAI API token
+});
 
 const tgBotUsername = process.env.BOT_USERNAME; // my tg bot`s username
 const ownerUsername = process.env.OWNER_USERNAME; // my own username
@@ -13,7 +15,7 @@ const ownerID = +process.env.OWNER_ID; // my tg chat`s code number
 const channelID = +process.env.CHANNEL_ID; // my tg channel`s code number
 
 const bot = new telegramAPI(tgBotToken, { polling: true }); // my tg bot
-const client = new openai({ apiKey: openaiAPIToken }); // my openAI API client
+const openai = new OpenAIApi(configuration); // my openAI API client
 
 const start = () => {
   let keywords = require('./keywords.json');
@@ -357,15 +359,11 @@ const start = () => {
       isAsked = false;
       const request = text;
 
-      client.completions.create({
+      const response = openai.createCompletion({
         engine: 'text-davinci-003',
         prompt: request, // prompt: asked message
-        max_tokens: 100,
-        temperature: 0.5,
-      }).then(response => {
-        console.log(response.choices[0].text);
-      }).catch(error => {
-        console.error(error);
+        temperature: 0,
+        max_tokens: 7,
       });
       
       await bot.sendMessage(chatID, response);
