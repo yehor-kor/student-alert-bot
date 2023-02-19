@@ -6,8 +6,8 @@ require('dotenv').config();
 const token = process.env.TOKEN; // my tg bot`s API token 
 const botUsername = process.env.BOT_USERNAME; // my tg bot`s username
 const ownerUsername = process.env.OWNER_USERNAME; // my own username
-const ownerID = process.env.OWNER_ID; // my tg chat`s code number
-const channelID = process.env.CHANNEL_ID; // my tg channel`s code number
+const ownerID = +process.env.OWNER_ID; // my tg chat`s code number
+const channelID = +process.env.CHANNEL_ID; // my tg channel`s code number
 const bot = new telegramAPI(token, { polling: true }); // my tg bot
 
 const start = () => {
@@ -117,8 +117,8 @@ const start = () => {
     }
 
     const deleteMessage = (chat = chatID) => {
-      const messageID = msg.message_id;
-      bot.deleteMessage(+chat, messageID);
+      const messageID = msg.message_id.toString();
+      bot.deleteMessage(chat, messageID);
     }
 
     const isKeyword = (word) => {
