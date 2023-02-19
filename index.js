@@ -1,21 +1,19 @@
 const telegramAPI = require('node-telegram-bot-api');
-const { Configuration, OpenAIApi } = require('openai');
+const openai = require("openai");
 const fs = require('fs');
 
 require('dotenv').config();
 
-const tgBotToken = process.env.TG_BOT_TOKEN; // my tg bot`s API token 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_TOKEN, // my openai.com API token
-});
+const tgBotToken = process.env.TG_BOT_TOKEN; // my tg bot API token 
+const openaiAPIToken = process.env.OPENAI_API_TOKEN; // my openAI API token
 
-const botUsername = process.env.BOT_USERNAME; // my tg bot`s username
+const tgBotUsername = process.env.BOT_USERNAME; // my tg bot`s username
 const ownerUsername = process.env.OWNER_USERNAME; // my own username
 const ownerID = +process.env.OWNER_ID; // my tg chat`s code number
 const channelID = +process.env.CHANNEL_ID; // my tg channel`s code number
 
 const bot = new telegramAPI(tgBotToken, { polling: true }); // my tg bot
-const openai = new OpenAIApi(configuration); // my openai.com config
+const client = new openai(openaiAPIToken); // my openAI API client
 
 const start = () => {
   let keywords = require('./keywords.json');
@@ -122,7 +120,7 @@ const start = () => {
     }
 
     const isCommand = (command) => {
-      return text === command || text === command + botUsername;
+      return text === command || text === command + tgBotUsername;
     }
 
     const deleteMessage = (chat = chatID) => {
@@ -358,11 +356,16 @@ const start = () => {
     else if (isAsked) {
       isAsked = false;
       const request = text;
-      const response = await openai.createCompletion({
-        model: 'text-davinci-003',
+
+      client.completions.create({
+        engine: 'text-davinci-003',
         prompt: request, // prompt: asked message
+        max_tokens: 100,
         temperature: 0.5,
-        max_tokens: 1024,
+      }).then(response => {
+        console.log(response.choices[0].text);
+      }).catch(error => {
+        console.error(error);
       });
       
       await bot.sendMessage(chatID, response);
