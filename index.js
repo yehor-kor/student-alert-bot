@@ -30,6 +30,7 @@ const start = () => {
 
   bot.setMyCommands([
     { command: '/start', description: 'Start bot or do secret' },
+    { command: '/chatgpt', description: 'Get all answers of this world with ChatGPT' },
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
     { command: '/self', description: 'Play an self-marking sound' },
