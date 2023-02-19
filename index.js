@@ -1,5 +1,5 @@
 const telegramAPI = require('node-telegram-bot-api');
-const { openai } = require('openai/api');
+const openai = require("openai").default;
 const fs = require('fs');
 
 require('dotenv').config();
