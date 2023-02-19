@@ -116,9 +116,9 @@ const start = () => {
       return text === command || text === command + botUsername;
     }
 
-    const deleteMessage = () => {
+    const deleteMessage = (chat = chatID) => {
       const messageID = msg.message_id;
-      bot.deleteMessage(chatID, messageID);
+      bot.deleteMessage(+chat, messageID);
     }
 
     const isKeyword = (word) => {
@@ -269,19 +269,19 @@ const start = () => {
     }
     
     else if (isCommand('/start alert')) {
-      deleteMessage();
+      deleteMessage(channelID);
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
       await bot.sendMessage(channelID, alertMessage + timeMessage);
     }
     
     else if (isCommand('/start clear')) {
-      deleteMessage();
+      deleteMessage(channelID);
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
       await bot.sendMessage(channelID, clearMessage + timeMessage);
     }
     
     else if (isCommand('/start self')) {
-      deleteMessage();
+      deleteMessage(channelID);
       await bot.sendMessage(channelID, selfMessage);
     }
     
