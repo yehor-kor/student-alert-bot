@@ -1,4 +1,4 @@
-const telegramAPI = require('node-telegram-bot-api');
+gitconst telegramAPI = require('node-telegram-bot-api');
 const { Configuration, OpenAIApi } = require('openai');
 const fs = require('fs');
 
@@ -359,14 +359,20 @@ const start = () => {
       isAsked = false;
       const request = text;
 
-      const response = openai.createCompletion({
+      const response = await openai.createCompletion({
         engine: 'text-davinci-003',
         prompt: request, // prompt: asked message
         temperature: 0,
         max_tokens: 7,
       });
-      
-      await bot.sendMessage(chatID, response);
+
+      const answer = (response?.data?.choices?.[0]?.text ?? "").trim();
+
+      if (answer !== "") {
+        await bot.sendMessage(chatID, answer);
+      } else {
+        console.error("Invalid response from OpenAI API");
+      }
     }
     
     else if (isSecretMessage) {
