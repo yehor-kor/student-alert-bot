@@ -1,4 +1,4 @@
-gitconst telegramAPI = require('node-telegram-bot-api');
+const telegramAPI = require('node-telegram-bot-api');
 const { Configuration, OpenAIApi } = require('openai');
 const fs = require('fs');
 
