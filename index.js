@@ -1,5 +1,5 @@
 const telegramAPI = require('node-telegram-bot-api');
-const openai = require("openai");
+const { openai } = require('openai/api');
 const fs = require('fs');
 
 require('dotenv').config();
@@ -13,7 +13,7 @@ const ownerID = +process.env.OWNER_ID; // my tg chat`s code number
 const channelID = +process.env.CHANNEL_ID; // my tg channel`s code number
 
 const bot = new telegramAPI(tgBotToken, { polling: true }); // my tg bot
-const client = new openai(openaiAPIToken); // my openAI API client
+const client = new openai({ apiKey: openaiAPIToken }); // my openAI API client
 
 const start = () => {
   let keywords = require('./keywords.json');
