@@ -269,19 +269,19 @@ const start = () => {
     }
     
     else if (isCommand('/start alert')) {
-      deleteMessage(channelID);
+      deleteMessage();
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
       await bot.sendMessage(channelID, alertMessage + timeMessage);
     }
     
     else if (isCommand('/start clear')) {
-      deleteMessage(channelID);
+      deleteMessage();
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
       await bot.sendMessage(channelID, clearMessage + timeMessage);
     }
     
     else if (isCommand('/start self')) {
-      deleteMessage(channelID);
+      deleteMessage();
       await bot.sendMessage(channelID, selfMessage);
     }
     
