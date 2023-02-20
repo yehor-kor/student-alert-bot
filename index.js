@@ -296,7 +296,7 @@ const start = () => {
     
     else if (isCommand('/chatgpt') && !isAsked) {
       isAsked = true;
-      let randomNumber = Math.round(Math.random() * 9 + 1); // range [1; 10]
+      let randomNumber = Math.round(Math.random() * 99 + 1); // range [1; 100]
       await bot.sendAnimation(chatID, `./videos/${randomNumber}.mp4`);
       await bot.sendMessage(chatID, 'Hello from ChatGPT! Please, send me a question message.');
     }
@@ -370,7 +370,7 @@ const start = () => {
       });
 
       response.then((data) => {
-        bot.sendMessage(chatID, data.data.choices[0].text);
+        bot.sendMessage(chatID, `ChatGPT:\n${data.data.choices[0].text}`);
       });
     }
     
