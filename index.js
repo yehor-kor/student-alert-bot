@@ -362,15 +362,15 @@ const start = () => {
       const response = openai.createCompletion({
         model: 'text-davinci-003',
         prompt: request, // prompt: asked message
-        temperature: 0,
+        temperature: 0.5,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
-        max_tokens: 1024
+        max_tokens: 1024,
       });
 
       response.then((data) => {
-        bot.sendMessage(chatID, `ChatGPT:\n${data.data.choices[0].text}`);
+        bot.sendMessage(chatID, `ChatGPT:${data.data.choices[0].text}`);
       });
     }
     
