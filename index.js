@@ -29,8 +29,8 @@ const start = () => {
   let isSecretMessage = false;
 
   bot.setMyCommands([
+    { command: '/chatgpt', description: 'Get all answers of the world with ChatGPT' },
     { command: '/start', description: 'Start bot or do secret' },
-    { command: '/chatgpt', description: 'Get all answers of this world with ChatGPT' },
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
     { command: '/self', description: 'Play an self-marking sound' },
@@ -147,7 +147,7 @@ const start = () => {
     const getCurrentTime = () => {
       const d = new Date();
 
-      let h = d.getHours();
+      let h = d.getHours() + 2; // London Server little fix
       let m = d.getMinutes();
       let s = d.getSeconds();
 
