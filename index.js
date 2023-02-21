@@ -9,7 +9,7 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_TOKEN, // my openAI API token
 });
 
-const tgBotUsername = process.env.BOT_USERNAME; // my tg bot`s username
+const tgBotUsername = process.env.TG_BOT_USERNAME; // my tg bot`s username
 const ownerUsername = process.env.OWNER_USERNAME; // my own username
 const ownerID = +process.env.OWNER_ID; // my tg chat`s code number
 const channelID = +process.env.CHANNEL_ID; // my tg channel`s code number
