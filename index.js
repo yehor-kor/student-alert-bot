@@ -23,14 +23,16 @@ const start = () => {
   let clearMessage = '🟢 Перекличка закінчилася, лягайте спати.\n';
   let selfMessage = '⚡️ Увага! Самовідмітка на занятті доступна протягом 15 хвилин.\n';
   let isFirstTime = true;
-  let isAsked = false;
+  let isAskedText = false;
+  let isAskedImage = false;
   let isSettingKeyword = false;
   let isSettingAlert = false;
   let isSecretMessage = false;
 
   bot.setMyCommands([
-    { command: '/chatgpt', description: 'Get all answers of the world with ChatGPT' },
     { command: '/start', description: 'Start bot or do secret' },
+    { command: '/chatgpt', description: 'Get all answers of the world with ChatGPT' },
+    { command: '/chatgptimg', description: 'Get all images of the world with ChatGPT' },
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
     { command: '/self', description: 'Play an self-marking sound' },
@@ -294,11 +296,18 @@ const start = () => {
       await bot.sendMessage(channelID, selfMessage);
     }
     
-    else if (isCommand('/chatgpt') && !isAsked) {
-      isAsked = true;
+    else if (isCommand('/chatgpt') && !isAskedText) {
+      isAskedText = true;
       let randomNumber = Math.round(Math.random() * 99 + 1); // range [1; 100]
       await bot.sendAnimation(chatID, `./videos/${randomNumber}.mp4`);
-      await bot.sendMessage(chatID, 'Hello from ChatGPT! Please, send me a question message.');
+      await bot.sendMessage(chatID, 'Hello from ChatGPT! Please, send me a question message and I will find an info for you.');
+    }
+    
+    else if (isCommand('/chatgptimg') && !isAskedImage) {
+      isAskedImage = true;
+      let randomNumber = Math.round(Math.random() * 99 + 1); // range [1; 100]
+      await bot.sendAnimation(chatID, `./videos/${randomNumber}.mp4`);
+      await bot.sendMessage(chatID, 'Hello from ChatGPT! Please, send me a question message and I will find an image for you.');
     }
     
     else if (isCommand('/random')) {
@@ -355,23 +364,56 @@ const start = () => {
       );
     }
     
-    else if (isAsked) {
-      isAsked = false;
+    else if (isAskedText) {
+      isAskedText = false;
       const request = text;
 
-      const response = openai.createCompletion({
-        model: 'text-davinci-003',
-        prompt: request, // prompt: asked message
-        temperature: 0.5,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-        max_tokens: 1024,
-      });
+      try {
+        const response = openai.createCompletion({
+          model: 'text-davinci-003',
+          prompt: request, // prompt: asked message
+          temperature: 0.5,
+          top_p: 1,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+          max_tokens: 1024,
+        });
 
-      response.then((data) => {
-        bot.sendMessage(chatID, `ChatGPT:${data.data.choices[0].text}`);
-      });
+        response.then((data) => {
+          bot.sendMessage(chatID, `ChatGPT:${data.data.choices[0].text}`);
+        });
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.data);
+        } else {
+          console.log(error.message);
+        }
+      }
+    }
+      
+    else if (isAskedImage) {
+      isAskedImage = false;
+      const request = text;
+
+      try {
+        const response = openai.createImage({
+          prompt: request, // prompt: asked message
+          n: 1,
+          size: "512x512",
+        });
+
+        response.then((data) => {
+          bot.sendMessage(chatID, `ChatGPT:${data.data.data[0].url}`);
+        });
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.data);
+        } else {
+          console.log(error.message);
+        }
+      }
     }
     
     else if (isSecretMessage) {
