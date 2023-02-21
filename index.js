@@ -404,7 +404,7 @@ const start = () => {
         });
 
         response.then((data) => {
-          bot.sendMessage(chatID, `ChatGPT:${data.data.data[0].url}`);
+          bot.sendMessage(chatID, `ChatGPT:\n\n${data.data.data[0].url}`);
         });
       } catch (error) {
         if (error.response) {
