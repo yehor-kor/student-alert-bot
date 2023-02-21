@@ -6,7 +6,7 @@
 
 <img src="https://user-images.githubusercontent.com/108824413/220239186-cd2190da-b008-410a-976a-2fbf20b3f2a0.png" alt="Check" width="150">
 
-- [StudentAlert - my bot in Telegram](https://t.me/student_alert_bot "StudentAlert bot")
+- [My bot in Telegram](https://t.me/student_alert_bot "StudentAlert bot")
 - [Info KN-1 - my channel in Telegram](https://t.me/infostudentalert "Info Student Alert tg-channel")
 
 ## Description
