@@ -6,7 +6,7 @@
 .DS_Store
 
 # Node
-node_modules
+/node_modules
 
 # Environment variables
 .env
