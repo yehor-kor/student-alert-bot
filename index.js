@@ -39,7 +39,7 @@ const start = () => {
     { command: '/music', description: 'Show a music menu' },
     { command: '/cum', description: 'Play a funny gif' },
     { command: '/random', description: 'Generate a random number from 1 to 6' },
-    { command: '/grade', description: 'Get a random grade' },
+    { command: '/grade', description: 'Get a random grade in 100-rate system' },
     { command: '/banana', description: 'Get a random length of banana' },
     { command: '/setalert', description: 'Set any alert message whatever you want' },
     { command: '/addkeyword', description: 'Add any keyword whatever you want' },
@@ -320,7 +320,7 @@ const start = () => {
       let randomGrade = Math.round(Math.random() * 100); // range [0; 100]
       await bot.sendMessage(
         chatID,
-        `${firstName}${username !== undefined ? ' aka @' + username : ''} has a ${randomGrade} grade!`
+        `${firstName}${username !== undefined ? ' aka @' + username : ''} has a ${randomGrade} / 100 grade!`
       );
     }
       
