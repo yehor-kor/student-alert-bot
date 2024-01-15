@@ -4,7 +4,7 @@ const fs = require('fs');
 
 require('dotenv').config();
 
-const tgBotToken = process.env.TG_BOT_TOKEN; // my tg bot API token 
+const tgBotToken = '6086564316:AAGEjAwqzpJWL-pIxpdrFO-mqng3QHTEeNI';
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_TOKEN, // my openAI API token
 });
