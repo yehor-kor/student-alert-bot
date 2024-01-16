@@ -165,7 +165,7 @@ const start = () => {
 
     viewInfo();
 
-    if (airAlertStatus) {
+    if (!airAlertStatus) {
       const city = "#Київська_область"; // selected city for alert
       const channelID = -1001766138888;
       const messageID = 1234;
