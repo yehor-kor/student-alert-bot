@@ -35,6 +35,8 @@ const start = () => {
     { command: '/chatgptimg', description: 'Get all images of the world with ChatGPT' },
     { command: '/alert', description: 'Play an alert sound' },
     { command: '/clear', description: 'Play an all-clear sound' },
+    { command: '/airalerton', description: 'Sign on air alert'},
+    { command: '/airalertoff', description: 'Sign off air alert'},
     { command: '/self', description: 'Play an self-marking sound' },
     { command: '/music', description: 'Show a music menu' },
     { command: '/cum', description: 'Play a funny gif' },
@@ -108,6 +110,7 @@ const start = () => {
     const username = msg.from.username;
     const date = msg.date;
     const time = new Date(date * 1000);
+    const airAlertStatus = true;
 
     const viewInfo = () => {
       console.log('------------------------------');
@@ -161,6 +164,14 @@ const start = () => {
     }
 
     viewInfo();
+
+    if (airAlertStatus) {
+      const city = "#Київська_область"; // selected city for alert
+      const channelID = '-1001766138888';
+      const message = await bot.getChat(channelID);
+
+      await bot.sendMessage(chatID, message);
+    }
     
     if (isCommand('/alert') || isKeyword(text)) {
       let timeMessage = `Стартувала о ${getCurrentTime()}`;
@@ -172,6 +183,14 @@ const start = () => {
       let timeMessage = `Закінчилася о ${getCurrentTime()}`;
       await bot.sendAudio(chatID, './sounds/probitie.mp3');
       await bot.sendMessage(chatID, clearMessage + timeMessage);
+    }
+
+    else if (isCommand('/airalerton')) {
+      airAlertStatus = true;
+    }
+
+    else if (isCommand('/airalerton')) {
+      airAlertStatus = false;
     }
     
     else if (isCommand('/self')) {
