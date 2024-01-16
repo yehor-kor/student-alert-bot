@@ -110,7 +110,7 @@ const start = () => {
     const username = msg.from.username;
     const date = msg.date;
     const time = new Date(date * 1000);
-    const airAlertStatus = true;
+    let airAlertStatus = true;
 
     const viewInfo = () => {
       console.log('------------------------------');
