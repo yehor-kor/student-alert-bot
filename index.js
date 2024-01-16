@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const tgBotToken = '6086564316:AAGEjAwqzpJWL-pIxpdrFO-mqng3QHTEeNI';
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_TOKEN, // my openAI API token
+  apiKey: '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', // my openAI API token
 });
 
 const tgBotUsername = process.env.TG_BOT_USERNAME; // my tg bot`s username
