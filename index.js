@@ -167,10 +167,10 @@ const start = () => {
 
     if (airAlertStatus) {
       const city = "#Київська_область"; // selected city for alert
-      const channelID = '-1001766138888';
-      const message = await bot.getChat(channelID);
+      const channelID = -1001766138888;
+      const messageID = 1234;
 
-      await bot.sendMessage(chatID, message);
+      await bot.forwardMessage(chatID, channelID, messageID);
     }
     
     if (isCommand('/alert') || isKeyword(text)) {
